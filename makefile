@@ -8,7 +8,7 @@ LIBFLAGS=-fPIC
 DEFINES=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -DRAR_SMP
 STRIP=strip
 AR=ar
-LDFLAGS=-pthread
+LDFLAGS+=-pthread
 DESTDIR=/usr
 
 # Linux using LCC
@@ -145,18 +145,19 @@ clean:
 	@rm -f libunrar.a
 
 unrar:	$(OBJECTS) $(UNRAR_OBJ)
-	$(LINK) -o unrar $(LDFLAGS) $(OBJECTS) $(UNRAR_OBJ) $(LIBS)	
+	$(LINK) -o unrar $(CXXFLAGS) $(LDFLAGS) $(OBJECTS) $(UNRAR_OBJ) $(LIBS)
 	$(STRIP) unrar
 
 sfx:	WHAT=SFX_MODULE
 sfx:	$(OBJECTS)
-	$(LINK) -o default.sfx $(LDFLAGS) $(OBJECTS)
+	$(LINK) -o default.sfx $(CXXFLAGS) $(LDFLAGS) $(OBJECTS)
 	$(STRIP) default.sfx
 
+$(OBJECTS) $(LIB_OBJ):	CXXFLAGS+=$(LIBFLAGS)
+
 lib:	WHAT=RARDLL
-lib:	CXXFLAGS+=$(LIBFLAGS)
 lib:	$(OBJECTS) $(LIB_OBJ)
-	$(LINK) -shared -o libunrar.so $(LDFLAGS) $(OBJECTS) $(LIB_OBJ)
+	$(LINK) -shared -o libunrar.so $(CXXFLAGS) $(LDFLAGS) $(OBJECTS) $(LIB_OBJ)
 	$(AR) rcs libunrar.a $(OBJECTS) $(LIB_OBJ)
 
 install-unrar:
