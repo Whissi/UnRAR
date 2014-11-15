@@ -139,23 +139,23 @@ uninstall:	uninstall-unrar
 
 clean:
 	@rm -f *.o *.bak *~
-
-unrar:	clean $(OBJECTS) $(UNRAR_OBJ)
 	@rm -f unrar
+	@rm -f default.sfx
+	@rm -f libunrar.so
+	@rm -f libunrar.a
+
+unrar:	$(OBJECTS) $(UNRAR_OBJ)
 	$(LINK) -o unrar $(LDFLAGS) $(OBJECTS) $(UNRAR_OBJ) $(LIBS)	
 	$(STRIP) unrar
 
 sfx:	WHAT=SFX_MODULE
-sfx:	clean $(OBJECTS)
-	@rm -f default.sfx
+sfx:	$(OBJECTS)
 	$(LINK) -o default.sfx $(LDFLAGS) $(OBJECTS)
 	$(STRIP) default.sfx
 
 lib:	WHAT=RARDLL
 lib:	CXXFLAGS+=$(LIBFLAGS)
-lib:	clean $(OBJECTS) $(LIB_OBJ)
-	@rm -f libunrar.so
-	@rm -f libunrar.a
+lib:	$(OBJECTS) $(LIB_OBJ)
 	$(LINK) -shared -o libunrar.so $(LDFLAGS) $(OBJECTS) $(LIB_OBJ)
 	$(AR) rcs libunrar.a $(OBJECTS) $(LIB_OBJ)
 
